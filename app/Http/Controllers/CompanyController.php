@@ -15,12 +15,13 @@ class CompanyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         return Inertia::render('CompanyList', [
-            'companies' => Company::all()->toArray()
+            'companies' => Company::paginate(10)
         ]);
     }
+
 
     /**
      * Show the form for creating a new resource.

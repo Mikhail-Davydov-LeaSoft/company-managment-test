@@ -1,6 +1,7 @@
 <script>
 import BreezeAuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import {Head} from '@inertiajs/inertia-vue3';
+import LaravelVuePagination from 'laravel-vue-pagination';
 
 export default {
     name: "CompanyList",
@@ -11,7 +12,8 @@ export default {
     },
     components: {
         BreezeAuthenticatedLayout,
-        Head
+        Head,
+        LaravelVuePagination
     },
     data() {
         return {
@@ -28,6 +30,12 @@ export default {
                 // this.status = response.data.status;
             })
         },
+        getResults(page = 1) {
+            axios.get('companyPaginate?page=' + page)
+                .then(response => {
+                    this.companiesData = response.data;
+                });
+        }
     }
 }
 </script>
@@ -47,13 +55,14 @@ export default {
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 bg-white border-b border-gray-200">
                         <ul>
-                            <li style="margin-bottom: 15px;" v-for="(company, index) in companies">
+                            <li style="margin-bottom: 15px;" v-for="(company, index) in companiesData.data">
                                 {{company}}
                                 <br/>
                                 <a :href="route('company.edit', company.id)">Edit</a>
                                 <button @click="removeCompany(company)">Remove</button>
                             </li>
                         </ul>
+                        <LaravelVuePagination :data="companiesData" @pagination-change-page="getResults" />
                     </div>
                 </div>
             </div>

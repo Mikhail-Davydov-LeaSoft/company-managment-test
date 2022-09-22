@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Company;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -34,6 +35,10 @@ Route::middleware('auth')->group(function () {
          'company' => CompanyController::class,
          'employee' => EmployeeController::class,
      ]);
+
+    Route::get('/companyPaginate', function () {
+        return Company::paginate(10);
+    });
 });
 
 require __DIR__.'/auth.php';
